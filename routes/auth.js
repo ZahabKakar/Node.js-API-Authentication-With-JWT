@@ -2,15 +2,7 @@ const router = require("express").Router();
 const user = require("../model/user");
 const { registerValidation, loginValidation } = require("../validation");
 const bycrpt = require("bcryptjs");
-//VALIDATION
-
-// const Joi = require("@hapi/joi");
-
-// const schema = Joi.object({
-//   name: Joi.string().min(6).required(),
-//   email: Joi.string().min(6).required().email(),
-//   password: Joi.string().min(6).required(),
-// });
+const jwt = require("jsonwebtoken");
 
 ////REGISTER
 router.post("/register", async (req, res) => {
@@ -57,7 +49,6 @@ router.post("/login", async (req, res) => {
   if (!userExist) return res.status(400).send("userDoesntExist");
 
   // CHECK PASSWORD
-  console.log(userExist);
   const validPassword = await bycrpt.compare(
     req.body.password,
     userExist.password
@@ -69,11 +60,10 @@ router.post("/login", async (req, res) => {
     password: req.body.password,
   });
 
-  try {
-    res.send("Logged in");
-  } catch (error) {
-    res.send(error);
-  }
+  //Create TOKEN
+
+  const token = jwt.sign({ _id: user._id }, "TOKEN_SECRET");
+  res.header("token-header", token).send(token);
 });
 
 module.exports = router;
