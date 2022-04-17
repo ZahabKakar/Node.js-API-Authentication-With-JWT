@@ -6,13 +6,9 @@ const mongoose = require("mongoose");
 const authRoute = require("./routes/auth");
 
 //connect DB
-mongoose.connect(
-  "mongodb+srv://test:test@cluster0.gahvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  { useNewUrlParser: true },
-  () => {
-    console.log("DB connected");
-  }
-);
+mongoose.connect("DATABASE_URL", { useNewUrlParser: true }, () => {
+  console.log("DB connected");
+});
 
 app.use(express.json());
 
